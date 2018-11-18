@@ -1,0 +1,43 @@
+def SRT(arrive,exe,arrived,waitToExe,msCount):
+	tempArrived=[]
+	tempWaitToExe=[]
+	while arrived == []:
+		a=0
+		#print "Time: ",msCount,"ms"
+		while a < len(arrive): #match an arrival time for the current msCount
+			if arrive[a] == msCount:
+				arrived.append(arrive[a])
+				waitToExe.append(exe[a])
+			a+=1
+		msCount+=1
+	while sum(waitToExe) != 0: #while the sum of waiting's execution duration is NOT zero...
+		#print "----------------------------" #this was commented out since it's looping
+		#print arrived
+		#print waitToExe
+		#print "----------------------------"
+		n=0
+		while n<len(waitToExe): #for length of waiting...
+			sortWaitToExe = sorted(waitToExe) #sort to get smallest job duration
+			if waitToExe[n] == sortWaitToExe[0] and waitToExe[n]!=0: #if current item = the lowest item in the sorted list
+				print "Processing item! Time: ",msCount #"process"
+				print arrived
+				print waitToExe
+				waitToExe[n] = waitToExe[n]-1 #subtract one "ms" from waiting duration
+				sortWaitToExe[0] = sortWaitToExe[n]-1 #subtract one "ms" from first sorted item
+				msCount+=1 #add to count
+				a=0
+				while a < len(arrive):  #then check again if any new jobs have arrived....
+					if arrive[a] == msCount:
+						tempArrived.append(arrive[a])
+						tempWaitToExe.append(exe[a])
+					a+=1
+				for item in tempWaitToExe:  #if an item in temp list is larger than an item in the real list, then break loop
+					if item<sortWaitToExe[0]:
+						n=len(waitToExe)
+			n+=1
+		for item in tempArrived:
+			arrived.append(item) #add temp items
+		for item2 in tempWaitToExe:
+			waitToExe.append(item2) #same...
+		tempArrived=[] #clear temp list
+		tempWaitToExe=[]#same
